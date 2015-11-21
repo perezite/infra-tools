@@ -16,15 +16,18 @@ SET repositoryFolder=repo
 	SET basePath=%~dp0
 
 	rem ## Checkout
+	echo Checkout ...
 	rem git clone --bare %repositoryUrl% %repositoryFolder% > nul 
 	call :SubGitClone
 	
 	rem ## Zip
+	echo Compress ...
 	SET zipArchive=%repositoryFolder%.7z
 	7za.exe a -r %zipArchive% %repositoryFolder% > nul
 	rmdir /S /Q %repositoryFolder%
 
 	rem ## Move
+	echo Copy to target ...
 	SET targetPath=%~dp2
 	SET targetPath=%targetPath:~0,-1%
 	if not exist %targetPath% (
@@ -32,25 +35,28 @@ SET repositoryFolder=repo
 	)
 	copy %zipArchive% %2
 	del /f %zipArchive%
-
+	
 	rem ## Verify
+	echo Verify ...
 	SET targetFile=%~nx2
 	SET verificationUnzipFolder=verify
 	SET SevenZipExecutable=%~dp07za.exe 
-	cd %targetPath%
+	cd /D %targetPath%
+	rem ## echo target: %targetPath%
+	rem ## echo actual: %cd%
 	%SevenZipExecutable% x -r -o%verificationUnzipFolder% %targetFile% > nul
-	cd %verificationUnzipFolder%\%repositoryFolder% > nul
+	cd /D %verificationUnzipFolder%\%repositoryFolder% > nul
 	git fsck > nul
 	IF %errorlevel% NEQ 0 (
-		cd ..\..
+		cd /D ..\..
 		rmdir /S /Q %verificationUnzipFolder%
 		del /f %targetFile%
-		cd %~dp0
+		cd /D %~dp0
 		exit /b
 	)
-	cd ..\..
+	cd /D ..\..
 	rmdir /S /Q %verificationUnzipFolder%
-	cd %~dp0
+	cd /D %~dp0
 
 	GOTO :End
 :EndMain
