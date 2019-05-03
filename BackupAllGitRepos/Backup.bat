@@ -30,7 +30,6 @@ git clone --bare https://github.com/perezite/ofpennereasing
 git clone --bare https://github.com/perezite/mini-python
 git clone --bare https://github.com/perezite/cavern
 git clone --bare https://github.com/perezite/braindamage
-git clone --bare https://github.com/perezite/braindamage
 git clone --bare https://github.com/perezite/mecha-mailer
 git clone --bare https://github.com/perezite/tech-support-game
 git clone --bare https://github.com/perezite/unityhacks
